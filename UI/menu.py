@@ -4,8 +4,37 @@ class Menu:
     def __init__(self, menu=["________________________________________________________", "--------------------------------------------------------",[],[""],[],"--------------------------------------------------------"]) -> None:
         self.menu = menu
 
-    def SwitchMenu(self, scene, menu_index, upper_display, lower_display):
-        #scene determines the topmost layer of menus, qol for me to navigate in code
-        #menu_index uses power of ten values for index, i.e. 10 for menu 1 in products, 11 for a specific product in products, or something like that
-        
+
+    def DrawMenu(self):
+        for item in self.menu:
+            if type(item) == list:
+                for sub_item in item:
+                    print(sub_item)
+            else:
+                print(item)
         pass
+
+    def SwitchMenu(self, upper_display=[""], lower_display=[""]):
+        self.menu[2] = upper_display
+        self.menu[4] = lower_display
+
+    def FormatOptions(self, options, i=1):
+        all_options = []
+        current_row = ""
+
+        for opt in options:
+            opt += f" [{i}] | "
+            
+            if current_row == "":
+                opt = "| " + opt
+            
+            current_row += opt
+            if i%3 == 0:
+                all_options.append(current_row)
+                current_row = ""
+            
+            i+=1
+        all_options.append(current_row)
+        return all_options
+        
+        
