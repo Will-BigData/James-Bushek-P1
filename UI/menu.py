@@ -14,9 +14,23 @@ class Menu:
                 print(item)
         pass
 
-    def SwitchMenu(self, upper_display=[""], lower_display=[""]):
-        self.menu[2] = upper_display
-        self.menu[4] = lower_display
+    def SwitchMenu(self, upper_display=[""], lower_display=[""], alternate_display=False):
+        
+        if alternate_display:
+            f_upper_display = self.FormatOptions(upper_display)
+
+            self.menu[2] = f_upper_display
+
+            f_lower_display = self.FormatOptions(lower_display, upper_display.__len__()+1)
+
+            self.menu[4] = f_lower_display
+        else:
+
+            self.menu[2] = upper_display
+
+            f_lower_display = self.FormatOptions(lower_display)
+
+            self.menu[4] = f_lower_display
 
     def FormatOptions(self, options, i=1):
         all_options = []

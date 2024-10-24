@@ -7,19 +7,27 @@ class Data:
 
 
     def UserLogin(self, username, password):
-        result = self.dao.GetUsersBy(f"UserName = {username} AND UserPwd = {password}")
-        print(result[0])
-        if result[0] != "":
+        result = self.dao.GetUsersBy(f"UserName = '{username}' AND UserPwd = '{password}'")
+        self.dao.CloseConnection()
+        print(result.__len__())
+        if result.__len__() > 0:
             return True
         else:
             return False
         
+    def GetUser():
+        pass
+        
     def GetInventory(self):
         result = self.dao.GetAllProducts("ProductName, Quantity")
         print(result)
-        
 
-        return result
+        product_list = []
+        for row in result:
+            if row[1] > 0:
+                product_list.append(row)
+
+        return product_list
 
     def GetProductsBy():
         pass
