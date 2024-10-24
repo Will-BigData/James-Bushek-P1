@@ -26,7 +26,7 @@ class DAO:
         self.MakeConnection()
 
         self.cursor.execute("USE Kamazon")
-        self.cursor.execute(f"SELECT {columns} FROM User")
+        self.cursor.execute(f"SELECT {columns} FROM Users JOIN Admins ON Users.User_ID=Admins.User_ID")
 
         return self.cursor.fetchall()
     
@@ -34,7 +34,7 @@ class DAO:
         self.MakeConnection()
 
         self.cursor.execute("USE Kamazon")
-        self.cursor.execute(rf"SELECT {columns} FROM Users WHERE {conditions}")
+        self.cursor.execute(rf"SELECT {columns} FROM Users JOIN Admins ON Users.User_ID=Admins.User_ID WHERE {conditions}")
 
         return self.cursor.fetchall()
 
@@ -77,17 +77,42 @@ class DAO:
         self.cursor.execute("USE Kamazon")
         self.cursor.execute(f"UPDATE Admins SET AdminEnabled = True WHERE User_ID = {user_id}")
 
+        self.CloseConnection()
+
     def UnMakeAdmin(self, user_id):
         self.MakeConnection()
 
         self.cursor.execute("USE Kamazon")
         self.cursor.execute(f"UPDATE Admins SET AdminEnabled = False WHERE User_ID = {user_id}")
 
+        self.CloseConnection()
+
+    def UpdateProduct(self, product_id, attributes):
+        self.MakeConnection()
+
+        self.cursor.execute("USE Kamazon")
+        self.cursor.execute(f"UPDATE Products SET {attributes} WHERE Product_ID = {product_id}")
+        self.cursor.execute("COMMIT")
+
+        self.CloseConnection()
+
+    def UpdateUser(self, user_id, attributes):
+        self.MakeConnection()
+
+        self.cursor.execute("USE Kamazon")
+        self.cursor.execute(f"UPDATE Users SET {attributes} WHERE User_ID = {user_id}")
+        self.cursor.execute("COMMIT")
+
+        self.CloseConnection()
+
     def DeleteProduct(self, product_name:str):
         self.MakeConnection()
 
         self.cursor.execute("USE Kamazon")
         self.cursor.execute(f"DELETE FROM Products WHERE ProductName {product_name}")
+
+        self.CloseConnection()
+
         
 
     # def GetData4(self, columns):
