@@ -8,7 +8,7 @@ class Data:
 
 
     def UserLogin(self, username, password):
-        result = self.dao.GetUsersBy(f"UserName = '{username}' AND UserPwd = '{password}'")
+        result = self.dao.GetUsersBy(rf"UserName = '{username}' AND UserPwd = '{password}'")
         self.dao.CloseConnection()
         if result.__len__() > 0:
             return True

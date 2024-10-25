@@ -68,7 +68,7 @@ class Service:
 
         shop_active = True
 
-
+        # UpdateStock
         while shop_active:
             dt.SaveUserCart(current_user)
 
@@ -406,9 +406,13 @@ class Service:
                             ppu = input("Price Per Unit: ")
                             dt.AddProduct(product_name, product_description, quantity, ppu)
                             print("Item Added!")
+                            print("")
+                            print("To Reflect the new changes, back out to the main menu")
                             logger.info(f"Admin {username} added the product {product_name} to the Kamazon inventory")
                             
                         else:
+                            up_menu = []
+                            lo_menu = []
                             current_product = product_list[u_input]
 
                             up_menu.append("Product_ID: " + str(current_product.__getattribute__("product_id")))
@@ -461,15 +465,12 @@ class Service:
 
                             elif lo_menu[u_input] == "Edit Price":
                                 new_ppu = input("New Product Price: ")
-                                if new_ppu.isdigit():
-                                    dt.UpdateProduct(current_product.__getattribute__("product_id"), "PPU", float(new_ppu))
-                                    print("Updated Product Price Per Unit")
-                                    print("")
-                                    print("To Reflect the new changes, back out to the main menu")
-                                    logger.info(f"Admin {username} changed the ppu of Product {current_product.__getattribute__("product_name")} to {new_ppu}")
-                                        
-                                else:
-                                    print("Enter a valid input, booting you back a menu...")
+
+                                dt.UpdateProduct(current_product.__getattribute__("product_id"), "PPU", float(new_ppu))
+                                print("Updated Product Price Per Unit")
+                                print("")
+                                print("To Reflect the new changes, back out to the main menu")
+                                logger.info(f"Admin {username} changed the ppu of Product {current_product.__getattribute__("product_name")} to {new_ppu}")
 
                             elif lo_menu[u_input] == "Remove Item":
                                 dt.DeleteProduct(current_product.__getattribute__("product_id"))

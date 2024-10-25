@@ -5,3 +5,73 @@ INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPl
 INFO:Service.service:User james Logged in | Admin:False
 INFO:Service.service:User james Logged out
 INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User james Logged in | Admin:False
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User greg Registered
+INFO:Service.service:User james Registered
+INFO:Service.service:User james Logged in | Admin:False
+INFO:Service.service:User james completed a transaction
+INFO:Service.service:User james Logged out
+INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User Admin Logged in | Admin:True
+INFO:Service.service:Admin Admin changed the password of User 1
+INFO:Service.service:Admin Admin granted Admin access to User 1
+INFO:Service.service:Admin Admin revoked Admin access from User 1
+INFO:Service.service:Admin Admin added the product Pirate sword to the Kamazon inventory
+INFO:Service.service:Admin Admin removed Pirate sword
+INFO:Service.service:User Admin Logged out
+INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User Admin Logged in | Admin:True
+INFO:Service.service:Admin Admin changed the Username of User james to 'James'
+INFO:Service.service:User Admin Logged out
+INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User james Logged in | Admin:False
+INFO:Service.service:User james Logged out
+INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User greg Registered
+INFO:Service.service:User greg Logged in | Admin:False
+INFO:Service.service:User greg Logged out
+INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User Admin Logged in | Admin:True
+INFO:Service.service:Admin Admin changed the password of User 3
+INFO:Service.service:Admin Admin cleared the cart of User 3
+INFO:Service.service:Admin Admin changed the quantity of Product Pepis to 8
+INFO:Service.service:User Admin completed a transaction
+INFO:Service.service:User Admin Logged out
+INFO:__main__:Shutting Down App
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User Admin Logged in | Admin:True
+INFO:Service.service:Admin Admin added the product Pirate sword to the Kamazon inventory
+INFO:Service.service:Admin Admin removed Pepis
+INFO:Service.service:User Admin Logged out
+INFO:__main__:Shutting Down App

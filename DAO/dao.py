@@ -53,7 +53,7 @@ class DAO:
         self.cursor.execute("USE Kamazon")
         self.cursor.execute(rf"INSERT INTO Users (UserName, UserPwd, Cart) VALUES ('{user_name}','{user_pwd}',0)")
         self.cursor.execute("COMMIT")
-        self.cursor.execute(rf"SELECT User_ID, UserName FROM Users WHERE UserName = '{user_name}'")
+        self.cursor.execute(rf"SELECT User_ID, UserName FROM Users WHERE UserName = '{user_name}' AND UserPwd = '{user_pwd}'")
         result = self.cursor.fetchall()
         new_id = result[0][0]
         
