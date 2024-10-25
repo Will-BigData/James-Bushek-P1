@@ -1,0 +1,7 @@
+INFO:__main__:Starting App
+INFO:mysql.connector:package: mysql.connector.plugins
+INFO:mysql.connector:plugin_name: caching_sha2_password
+INFO:mysql.connector:AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+INFO:Service.service:User james Logged in | Admin:False
+INFO:Service.service:User james Logged out
+INFO:__main__:Shutting Down App

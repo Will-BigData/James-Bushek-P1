@@ -1,6 +1,7 @@
 from UI.menu import Menu
 from Data.data import Data
 from Resources.user import User
+import logging
 
 class Service:
     #TODO check for other todo's w/ this one
@@ -9,6 +10,7 @@ class Service:
 
 
     def Shop(self):
+        logger = logging.getLogger(__name__)
         mn = Menu()
         dt = Data()
         current_user = ""
@@ -17,39 +19,72 @@ class Service:
         product_list = []
 
         while login_req:
-            success = False
-            username = input("Username: ")
-            password = input("Password: ")
-            username.strip()
-            password.strip()
+            login_choice = input("Would you like to Login(0) or create an Account(1)? :")
 
-            if username != "" and password != "":
-                success = dt.UserLogin(username, password)
+            if login_choice.isdigit():
+                if int(login_choice) == 0:
+                    success = False
+                    username = input("Username: ")
+                    password = input("Password: ")
+                    username.strip()
+                    password.strip()
 
-            if success:
-                login_req = False
-                current_user = dt.GetUser(username, password)
+                    if username != "" and password != "":
+                        success = dt.UserLogin(username, password)
 
+                    if success:
+                        
+                        login_req = False
+                        current_user = dt.GetUser(username, password)
+                        logger.info(f"User {username} Logged in | Admin:{current_user.__getattribute__("admin")}")
+
+                    else:
+                        print("Invalid Username or Password")
+
+                elif int(login_choice) == 1:
+                    username = input("Username: ")
+                    password = input("Password: ")
+                    username.strip()
+                    password.strip()
+
+                    if username != "" and password != "":
+                        dt.AddUser(username, password)
+                        logger.info(f"User {username} Registered")
+                        print("")
+                        print("You are now registered with Kamazon!")
+                    else:
+                        print("")
+                        print("You must enter something for both username and password")
+                        print("")
+
+                else:
+                    print("")
+                    print("Please enter a valid input")
+                    print("")
             else:
-                print("Invalid Username or Password")
+                print("")
+                print("Please enter a valid input")
+                print("")
 
         shop_active = True
 
-        product_list = dt.GetInventory()
-
-        i = 0
-        for product in product_list:
-            stock = product.__getattribute__("quantity")
-            for id in list(str(current_user.__getattribute__("cart"))):
-                if int(id) == product.__getattribute__("product_id"):
-                    stock -= 1
-
-            product.__setattr__("quantity", stock)
-            product_list[i] = product
-            i+=1
 
         while shop_active:
             dt.SaveUserCart(current_user)
+
+            product_list = dt.GetInventory()
+
+            i = 0
+            for product in product_list:
+                stock = product.__getattribute__("quantity")
+                for id in list(str(current_user.__getattribute__("cart"))):
+                    if int(id) == product.__getattribute__("product_id"):
+                        stock -= 1
+
+                product.__setattr__("quantity", stock)
+                product_list[i] = product
+                i+=1
+
             up_menu = ["Welcome to Kamazon!"]
             lo_menu = []
 
@@ -200,6 +235,8 @@ class Service:
                                 print("")
                                 print("Thank you for shopping Kamazon!")
 
+                                logger.info(f"User {username} completed a transaction")
+
                                 inner_menu_1 = False
                                 inner_menu_2 = False
                             
@@ -246,15 +283,17 @@ class Service:
                     shop_active = False
                     inner_menu_1 = False
 
+                    logger.info(f"User {username} Logged out")
+
                     print("Have a Great Day!")
                     print("")
                     print("We look forward to you future patronage!")
                     
                 elif lo_menu[u_input] == "Users":
-                    all_users = dt.GetAllUsers()
                     inner_menu_2 = True
 
                     while inner_menu_2:
+                        all_users = dt.GetAllUsers()
                         up_menu = []
                         lo_menu = []
 
@@ -282,22 +321,164 @@ class Service:
                             up_menu.append("User_ID: " + str(target_user.__getattribute__("user_id")))
                             up_menu.append("Username: " + target_user.__getattribute__("user_name"))
                             up_menu.append("Cart: " + str(target_user.__getattribute__("cart")))
-                            up_menu.append("Admin: " + target_user.__getattribute__("admin"))
+                            up_menu.append("Admin: " + str(target_user.__getattribute__("admin")))
                             up_menu.append("Password: " + target_user.__getattribute__("password"))
 
-                            lo_menu.append("")
+                            lo_menu.append("Edit Username")
+                            lo_menu.append("Clear Cart")
+                            lo_menu.append("Edit Admin Access")
+                            lo_menu.append("Edit Password")
+                            lo_menu.append("Back")
 
 
                             mn.SwitchMenu(up_menu, lo_menu)
                             mn.DrawMenu()
 
-                            if something:
-                                pass
-                    
+                            u_input = self.UserInput(lo_menu.__len__())
+
+                            if lo_menu[u_input] == "Back":
+                                inner_menu_1 = False
+                                inner_menu_2 = False
+
+                            elif lo_menu[u_input] == "Edit Username":
+                                new_username = input("New Username: ")
+                                new_username = rf"'{new_username}'"
+                                dt.UpdateUser(target_user.__getattribute__("user_id"), "UserName", new_username)
+                                print("Updated User Name")
+                                logger.info(f"Admin {username} changed the Username of User {target_user.__getattribute__("user_name")} to {new_username}")
+
+                            elif lo_menu[u_input] == "Clear Cart":
+                                target_user.__setattr__("cart", 0)
+                                dt.SaveUserCart(target_user)
+                                print("Cleared User Cart")
+                                logger.info(f"Admin {username} cleared the cart of User {target_user.__getattribute__("user_id")}")
+
+                            elif lo_menu[u_input] == "Edit Admin Access":
+                                new_access = input("Edit User Admin Access(0|1): ")
+
+                                if new_access.isdigit():
+                                    if int(new_access) == 0:
+                                        dt.EditAdmin(target_user.__getattribute__("user_id"), False)
+                                        logger.info(f"Admin {username} revoked Admin access from User {target_user.__getattribute__("user_id")}")
+                                        
+                                    elif int(new_access) == 1:
+                                        dt.EditAdmin(target_user.__getattribute__("user_id"), True)
+                                        logger.info(f"Admin {username} granted Admin access to User {target_user.__getattribute__("user_id")}")
+                                        
+                                    else:
+                                        print("Enter a valid input, booting you back a menu...")
+
+                            elif lo_menu[u_input] == "Edit Password":
+                                new_password = input("New Password: ")
+                                new_password = rf"'{new_password}'"
+                                dt.UpdateUser(target_user.__getattribute__("user_id"), "UserPwd", new_password)
+                                print("Updated User Password")
+                                logger.info(f"Admin {username} changed the password of User {target_user.__getattribute__("user_id")}")
+                                              
                 elif lo_menu[u_input] == "Edit Inventory":
-                    #TODO allow adding & removing products, and updating product info
-                    up_menu = []
-                    lo_menu = []
+                    inner_menu_2 = True
+
+                    while inner_menu_2:
+                        up_menu = []
+                        lo_menu = []
+
+                        for product in product_list:
+                            up_menu.append(product.__getattribute__("product_name"))
+
+                        lo_menu.append("Add Item")
+                        lo_menu.append("Back")
+
+                        mn.SwitchMenu(up_menu, lo_menu, True)
+                        mn.DrawMenu()
+
+                        total_menu = up_menu + lo_menu
+
+                        u_input = self.UserInput(total_menu.__len__())
+
+                        if total_menu[u_input] == "Back":
+                            inner_menu_1 = False
+                            inner_menu_2 = False
+
+                        elif total_menu[u_input] == "Add Item":
+                            product_name = input("Product Name: ")
+                            product_description = input("Product Description: ")
+                            quantity = input("Quantity: ")
+                            ppu = input("Price Per Unit: ")
+                            dt.AddProduct(product_name, product_description, quantity, ppu)
+                            print("Item Added!")
+                            logger.info(f"Admin {username} added the product {product_name} to the Kamazon inventory")
+                            
+                        else:
+                            current_product = product_list[u_input]
+
+                            up_menu.append("Product_ID: " + str(current_product.__getattribute__("product_id")))
+                            up_menu.append("Product Name: " + current_product.__getattribute__("product_name"))
+                            up_menu.append("Description: " + current_product.__getattribute__("product_description"))
+                            up_menu.append("Quantity in Stock: " + str(current_product.__getattribute__("quantity")))
+                            up_menu.append("Price Per Unit: " + str(current_product.__getattribute__("ppu")))
+
+                            lo_menu.append("Edit Name")
+                            lo_menu.append("Edit Description")
+                            lo_menu.append("Edit Quantity")
+                            lo_menu.append("Edit Price")
+                            lo_menu.append("Remove Item")
+                            lo_menu.append("Back")
+
+                            mn.SwitchMenu(up_menu, lo_menu)
+                            mn.DrawMenu()
+
+                            u_input = self.UserInput(lo_menu.__len__())
+
+                            if lo_menu[u_input] == "Edit Name":
+                                new_product_name = input("New Product Name: ")
+                                new_product_name = rf"'{new_product_name}'"
+                                dt.UpdateProduct(current_product.__getattribute__("product_id"), "ProductName", new_product_name)
+                                print("Updated Product Name")
+                                print("")
+                                print("To Reflect the new changes, back out to the main menu")
+                                logger.info(f"Admin {username} changed the name of Product {current_product.__getattribute__("product_name")} to {new_product_name}")
+
+                            elif lo_menu[u_input] == "Edit Description":
+                                new_product_descr = input("New Product Description: ")
+                                new_product_descr = rf"'{new_product_descr}'"
+                                dt.UpdateProduct(current_product.__getattribute__("product_id"), "ProductDescription", new_product_descr)
+                                print("Updated Product Name")
+                                print("")
+                                print("To Reflect the new changes, back out to the main menu")
+                                logger.info(f"Admin {username} changed the description of Product {current_product.__getattribute__("product_name")} to {new_product_descr}")
+
+                            elif lo_menu[u_input] == "Edit Quantity":
+                                new_quantity = input("New Product Quantity: ")
+                                if new_quantity.isdigit():
+                                    dt.UpdateProduct(current_product.__getattribute__("product_id"), "Quantity", int(new_quantity))
+                                    print("Updated Product Quantity")
+                                    print("")
+                                    print("To Reflect the new changes, back out to the main menu")
+                                    logger.info(f"Admin {username} changed the quantity of Product {current_product.__getattribute__("product_name")} to {new_quantity}")
+                                        
+                                else:
+                                    print("Enter a valid input, booting you back a menu...")
+
+                            elif lo_menu[u_input] == "Edit Price":
+                                new_ppu = input("New Product Price: ")
+                                if new_ppu.isdigit():
+                                    dt.UpdateProduct(current_product.__getattribute__("product_id"), "PPU", float(new_ppu))
+                                    print("Updated Product Price Per Unit")
+                                    print("")
+                                    print("To Reflect the new changes, back out to the main menu")
+                                    logger.info(f"Admin {username} changed the ppu of Product {current_product.__getattribute__("product_name")} to {new_ppu}")
+                                        
+                                else:
+                                    print("Enter a valid input, booting you back a menu...")
+
+                            elif lo_menu[u_input] == "Remove Item":
+                                dt.DeleteProduct(current_product.__getattribute__("product_id"))
+                                print("Product Removed")
+                                logger.info(f"Admin {username} removed {current_product.__getattribute__("product_name")}")
+
+                            elif lo_menu[u_input] == "Back":
+                                inner_menu_1 = False
+                                inner_menu_2 = False
 
                 else:
                     print("Somehow, something went wrong")
@@ -320,5 +501,6 @@ class Service:
                     print("Please enter a valid choice.")
             else:
                 print("Please enter a non-negative number.")
+
 
 

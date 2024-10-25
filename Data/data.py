@@ -18,7 +18,7 @@ class Data:
     def GetUser(self, username, password):
         result = self.dao.GetUsersBy(f"UserName = '{username}' AND UserPwd = '{password}'")
         self.dao.CloseConnection()
-        target_user = User(int(result[0][0]), result[0][1], int(result[0][3]), bool(result[0][4]))
+        target_user = User(int(result[0][0]), result[0][1], int(result[0][3]), bool(result[0][5]))
         return target_user
         
     def GetInventory(self):
@@ -59,23 +59,26 @@ class Data:
         self.dao.CloseConnection()
         all_users = []
         for row in result:
-            next_user = User(int(row[0]), row[1], int(row[3]), bool(row[4]), row[2])
+            next_user = User(int(row[0]), row[1], int(row[3]), bool(row[5]), row[2])
             all_users.append(next_user)
         return all_users
+    
+    def UpdateUser(self, user_id, field, value):
+        self.dao.UpdateUser(user_id, f"{field} = {value}")
 
-    def AddProduct():
-        pass
+    def AddProduct(self, name, descr, quantity, ppu):
+        self.dao.AddProduct(name, descr, quantity, ppu)
 
-    def AddUser():
-        pass
+    def UpdateProduct(self, product_id, field, value):
+        self.dao.UpdateProduct(product_id, f"{field} = {value}")
 
-    def MakeAdmin():
-        pass
+    def AddUser(self, username, password):
+        self.dao.AddUser(username, password)
 
-    def UnMakeAdmin():
-        pass
+    def EditAdmin(self, user_id, access):
+        self.dao.EditAdmin(user_id, access)
 
-    def DeleteProduct():
-        pass
+    def DeleteProduct(self, product_id:int):
+        self.dao.DeleteProduct(product_id)
 
 

@@ -15,7 +15,7 @@ class Menu:
         pass
 
     def SwitchMenu(self, upper_display=[""], lower_display=[""], alternate_display=False):
-        
+
         if alternate_display:
             f_upper_display = self.FormatOptions(upper_display)
 
@@ -35,6 +35,7 @@ class Menu:
     def FormatOptions(self, options, i=1):
         all_options = []
         current_row = ""
+        j = 1
 
         for opt in options:
             opt += f" [{i}] | "
@@ -43,10 +44,11 @@ class Menu:
                 opt = "| " + opt
             
             current_row += opt
-            if i%3 == 0:
+            if j%3 == 0:
                 all_options.append(current_row)
                 current_row = ""
             
+            j+=1
             i+=1
         all_options.append(current_row)
         return all_options
